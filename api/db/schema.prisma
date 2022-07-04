@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -8,11 +8,96 @@ generator client {
   binaryTargets = "native"
 }
 
-// Define your own datamodels here and run `yarn redwood prisma migrate dev`
-// to create migrations for them and apply to your dev DB.
-// TODO: Please remove the following example:
-model UserExample {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+enum Role {
+  admin
+  coreteam
+  partner
+  startup
+  contributor
+  default
+}
+
+model Member {
+  // We keep community informations here.
+  // Meta.
+  id          Int     @id @default(autoincrement())
+  user        User    @relation(fields: [userId], references: [id])
+  userId      Int
+  // Data.
+  title       String?
+  description String?
+  linkedin    String?
+  discord     String?
+}
+
+model SkillSet {
+  id     Int    @id @default(autoincrement())
+  label  String @unique
+  users  User[] @relation("Skillsets")
+  user   User[] @relation("SkillsetStrength")
+  idea   Idea?  @relation(fields: [ideaId], references: [id])
+  ideaId Int?
+}
+
+model Skill {
+  id     Int    @id @default(autoincrement())
+  label  String @unique
+  users  User[]
+  Idea   Idea?  @relation(fields: [ideaId], references: [id])
+  ideaId Int?
+}
+
+model Topic {
+  id          Int    @id @default(autoincrement())
+  label       String @unique
+  description String @unique
+  users       User[]
+  Idea        Idea?  @relation(fields: [ideaId], references: [id])
+  ideaId      Int?
+}
+
+model User {
+  // Meta.
+  id          Int        @id @default(autoincrement())
+  role        Role       @default(default)
+  // Data.
+  email       String     @unique
+  handle      String     @unique
+  firstname   String?
+  lastname    String?
+  avatar      String?
+  // Relationships.
+  strength    SkillSet   @relation("SkillsetStrength", fields: [strengthId], references: [id])
+  strengthId  Int
+  skills      Skill[]
+  skillSets   SkillSet[] @relation("Skillsets")
+  topics      Topic[]
+  authorOf    Idea[]     @relation("UserAuthorOfIdea")
+  championFor Idea[]     @relation("UserChampionOfIdea")
+  captainFor  Idea[]     @relation("UserCaptainOfIdea")
+  follows     Idea[]     @relation("UserInterestedInIdea")
+  member      Member[]
+}
+
+model Idea {
+  // Meta.
+  id           Int        @id @default(autoincrement())
+  author       User       @relation("UserAuthorOfIdea", fields: [authorId], references: [id])
+  authorId     Int
+  // Data.
+  title        String     @unique
+  problem      String     @unique
+  solution     String?
+  chat         String?
+  conversation String?
+  main         String?
+  specs        String?
+  // Relationships.
+  captain      User?      @relation("UserCaptainOfIdea", fields: [captainId], references: [id])
+  captainId    Int?
+  champions    User[]     @relation("UserChampionOfIdea")
+  topics       Topic[]
+  hires        SkillSet[]
+  technologies Skill[]
+  followers    User[]     @relation("UserInterestedInIdea")
 }
