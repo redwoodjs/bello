@@ -1,11 +1,7 @@
-import { db } from "api/src/lib/db"
-
-const skills = [
-  "JavaScript", "TypeScript", "Jest", "GraphQL", "Prisma"
-]
+import { db } from 'api/src/lib/db'
+import { skills } from 'api/src/seeds/skills'
 
 export default async function () {
-
   for (let i in skills) {
     const skill = await db.skill.findUnique({ where: { label: skills[i] } })
 
@@ -14,7 +10,5 @@ export default async function () {
     }
   }
 
-  console.log("Skills seeded.");
-
-
+  console.log('Skills seeded.')
 }

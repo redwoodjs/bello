@@ -5,6 +5,7 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
+  "scss.lint.unknownAtRules": "ignore",
   "[prisma]": {
     "editor.formatOnSave": true
   }

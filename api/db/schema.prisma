@@ -58,25 +58,31 @@ model Topic {
 
 model User {
   // Meta.
-  id          Int        @id @default(autoincrement())
-  role        Role       @default(default)
+  id                  Int        @id @default(autoincrement())
+  role                Role       @default(default)
   // Data.
-  email       String     @unique
-  handle      String     @unique
-  firstname   String?
-  lastname    String?
-  avatar      String?
+  hasOnboarded        Boolean    @default(false)
+  email               String     @unique
+  username            String?    @unique
+  firstname           String?
+  lastname            String?
+  avatar              String?
+  // Auth
+  hashedPassword      String
+  salt                String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
   // Relationships.
-  strength    SkillSet   @relation("SkillsetStrength", fields: [strengthId], references: [id])
-  strengthId  Int
-  skills      Skill[]
-  skillSets   SkillSet[] @relation("Skillsets")
-  topics      Topic[]
-  authorOf    Idea[]     @relation("UserAuthorOfIdea")
-  championFor Idea[]     @relation("UserChampionOfIdea")
-  captainFor  Idea[]     @relation("UserCaptainOfIdea")
-  follows     Idea[]     @relation("UserInterestedInIdea")
-  member      Member[]
+  strength            SkillSet?   @relation("SkillsetStrength", fields: [strengthId], references: [id])
+  strengthId          Int?
+  skills              Skill[]
+  skillSets           SkillSet[] @relation("Skillsets")
+  topics              Topic[]
+  authorOf            Idea[]     @relation("UserAuthorOfIdea")
+  championFor         Idea[]     @relation("UserChampionOfIdea")
+  captainFor          Idea[]     @relation("UserCaptainOfIdea")
+  follows             Idea[]     @relation("UserInterestedInIdea")
+  member              Member[]
 }
 
 model Idea {

@@ -13,12 +13,17 @@
     ]
   },
   "dependencies": {
-    "@redwoodjs/forms": "2.0.0",
-    "@redwoodjs/router": "2.0.0",
-    "@redwoodjs/web": "2.0.0",
+    "@redwoodjs/auth": "^2.1.0",
+    "@redwoodjs/forms": "^2.1.0",
+    "@redwoodjs/router": "^2.1.0",
+    "@redwoodjs/web": "^2.1.0",
+    "classnames": "^2.3.1",
     "prop-types": "15.8.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "recoil": "^0.7.4",
+    "sass": "^1.53.0",
+    "sass-loader": "^13.0.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.7",
