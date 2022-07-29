@@ -3,7 +3,7 @@ export const schema = gql`
     id: Int!
     label: String!
     users: [User]!
-    user: [User]!
+    strengthOf: [User]
     idea: Idea
     ideaId: Int
   }

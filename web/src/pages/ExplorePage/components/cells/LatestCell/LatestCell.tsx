@@ -30,7 +30,7 @@ export const Success = ({ ideas }) => (
                 <p className="text-xl font-bold text-gray-700">{idea.title}</p>
                 <div className="mt-1">
                   {idea.topics.map((topic) => (
-                    <Badge>{topic.label}</Badge>
+                    <Badge color="yellow">{topic.label}</Badge>
                   ))}
                 </div>
                 <p className="mt-4">{idea.problem.substr(0, 130)}</p>

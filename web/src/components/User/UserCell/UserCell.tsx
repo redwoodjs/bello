@@ -15,6 +15,10 @@ export const QUERY = gql`
       lastname
       avatar
       strengthId
+      strength {
+        id
+        label
+      }
       skillSets {
         id
         label
@@ -22,6 +26,15 @@ export const QUERY = gql`
       skills {
         id
         label
+      }
+      topics {
+        id
+        label
+      }
+      member {
+        id
+        title
+        description
       }
     }
   }

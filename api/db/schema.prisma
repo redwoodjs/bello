@@ -17,26 +17,13 @@ enum Role {
   default
 }
 
-model Member {
-  // We keep community informations here.
-  // Meta.
-  id          Int     @id @default(autoincrement())
-  user        User    @relation(fields: [userId], references: [id])
-  userId      Int
-  // Data.
-  title       String?
-  description String?
-  linkedin    String?
-  discord     String?
-}
-
 model SkillSet {
-  id     Int    @id @default(autoincrement())
-  label  String @unique
-  users  User[] @relation("UserSkillsets")
-  user   User[] @relation("SkillsetStrength")
-  idea   Idea?  @relation(fields: [ideaId], references: [id])
-  ideaId Int?
+  id           Int    @id @default(autoincrement())
+  label        String @unique
+  users        User[] @relation("UserSkillsets")
+  strengthOf   User[] @relation("SkillsetStrength")
+  idea         Idea?  @relation(fields: [ideaId], references: [id])
+  ideaId       Int?
 }
 
 model Skill {
@@ -82,7 +69,20 @@ model User {
   championFor         Idea[]     @relation("UserChampionOfIdea")
   captainFor          Idea[]     @relation("UserCaptainOfIdea")
   follows             Idea[]     @relation("UserInterestedInIdea")
-  member              Member[]
+  member              Member?
+}
+
+model Member {
+  // We keep community informations here.
+  // Meta.
+  id          Int     @id @default(autoincrement())
+  user        User @relation(fields:[userId],references: [id]) // <-- This is the right way to do a one-to-one.
+  userId      Int @unique // <-- This is the right way to do a one-to-one.
+  // Data.
+  title       String?
+  description String?
+  linkedin    String?
+  discord     String?
 }
 
 model Idea {
