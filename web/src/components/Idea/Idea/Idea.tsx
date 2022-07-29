@@ -70,7 +70,7 @@ const Idea = ({ idea }) => {
           </header>
           <p className="mt-4 text-justify">{idea.problem}</p>
         </article>
-        <aside className="w-full md:w-1/2 mt-4 md:mt-0 flex flex-row justify-end">
+        <aside className="w-full md:w-1/2 mt-4 md:mt-0 flex flex-col justify-start items-center">
           <Person {...idea.author} />
         </aside>
       </section>
