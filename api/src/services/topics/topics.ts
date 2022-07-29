@@ -5,6 +5,9 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import Active from 'src/lib/Explore/Topics/Active/Active'
+
+export const activeTopics = Active
 
 export const topics: QueryResolvers['topics'] = () => {
   return db.topic.findMany()

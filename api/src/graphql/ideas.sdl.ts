@@ -17,27 +17,23 @@ export const schema = gql`
     hires: [SkillSet]!
     technologies: [Skill]!
     followers: [User]!
+    canEdit: Boolean
   }
 
   type Query {
-    ideas: [Idea!]! @requireAuth
-    idea(id: Int!): Idea @requireAuth
+    latest: [Idea] @skipAuth
+    ideas: [Idea!]! @skipAuth
+    idea(id: Int!): Idea @skipAuth
   }
 
   input CreateIdeaInput {
-    authorId: Int!
     title: String!
     problem: String!
     solution: String
-    chat: String
-    conversation: String
-    main: String
-    specs: String
-    captainId: Int
+    topics: [Int]!
   }
 
   input UpdateIdeaInput {
-    authorId: Int
     title: String
     problem: String
     solution: String

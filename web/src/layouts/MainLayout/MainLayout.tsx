@@ -5,8 +5,8 @@ import {
   useRecoilState,
   useRecoilValue,
 } from 'recoil'
-import Navigation from './components/Menu/Navigation'
-import User from './components/Menu/User'
+import Footer from './components/Footer'
+import Header from './components/Header'
 
 type MainLayoutProps = {
   children?: React.ReactNode
@@ -15,11 +15,9 @@ type MainLayoutProps = {
 const MainLayout = ({ children }: MainLayoutProps) => {
   return (
     <RecoilRoot>
-      <header className="p-4 flex flex-row w-full justify-between items-baseline">
-        <Navigation />
-        <User />
-      </header>
-      <section className="h-screen px-[100px]">{children}</section>
+      <Header />
+      <section className=" px-4 md:px-[100px]">{children}</section>
+      <Footer />
     </RecoilRoot>
   )
 }

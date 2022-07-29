@@ -14,6 +14,7 @@ export const users: QueryResolvers['users'] = () => {
 export const user: QueryResolvers['user'] = ({ id }) => {
   return db.user.findUnique({
     where: { id },
+    include: { skills: true, skillSets: true },
   })
 }
 

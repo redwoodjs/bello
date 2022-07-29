@@ -25,9 +25,9 @@ const NewIdea = () => {
 
   const onSave = (input) => {
     const castInput = Object.assign(input, {
-      authorId: parseInt(input.authorId),
-      captainId: parseInt(input.captainId),
+      topics: input.topics.map(parseInt),
     })
+
     createIdea({ variables: { input: castInput } })
   }
 

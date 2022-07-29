@@ -15,6 +15,7 @@ import EmptyLayout from 'src/layouts/EmptyLayout/EmptyLayout'
 const Routes = () => {
   return (
     <Router>
+      <Route path="/" page={HomepagePage} name="homepage" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/signup" page={SignupPage} name="signup" />
       <Route path="/forgot-password" page={ForgotPasswordPage} name="forgotPassword" />
@@ -24,7 +25,7 @@ const Routes = () => {
         <Route path="/ideas/new" page={IdeaNewIdeaPage} name="newIdea" />
       </Set>
       <Set wrap={MainLayout}>
-        <Route path="/" page={HomepagePage} name="homepage" />
+        <Route path="/explore" page={ExplorePage} name="explore" />
         <Route path="/dashboard" page={UserDashboardPage} name="dashboard" />
         <Route path="/ideas/{id:Int}/edit" page={IdeaEditIdeaPage} name="editIdea" />
         <Route path="/ideas/{id:Int}" page={IdeaIdeaPage} name="idea" />

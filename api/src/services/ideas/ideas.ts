@@ -5,22 +5,32 @@ import type {
 } from 'types/graphql'
 
 import { db } from 'src/lib/db'
+import Create from 'src/lib/Ideation/Idea/Create/Create'
+import Latest from 'src/lib/Explore/Ideas/Latest/Latest'
+
+export const latest = Latest
 
 export const ideas: QueryResolvers['ideas'] = () => {
   return db.idea.findMany()
 }
 
 export const idea: QueryResolvers['idea'] = ({ id }) => {
-  return db.idea.findUnique({
-    where: { id },
-  })
+  return db.idea
+    .findUnique({
+      where: { id },
+      include: { author: true, captain: true },
+    })
+    .then((idea) => ({
+      ...idea,
+      canEdit:
+        (context?.currentUser?.id &&
+          [idea.authorId, idea.captainId].includes(context.currentUser.id)) ||
+        context?.currentUser?.roles?.includes('coreteam') ||
+        false,
+    }))
 }
 
-export const createIdea: MutationResolvers['createIdea'] = ({ input }) => {
-  return db.idea.create({
-    data: input,
-  })
-}
+export const createIdea = Create
 
 export const updateIdea: MutationResolvers['updateIdea'] = ({ id, input }) => {
   return db.idea.update({

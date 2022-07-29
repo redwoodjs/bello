@@ -6,10 +6,12 @@ export const schema = gql`
     users: [User]!
     Idea: Idea
     ideaId: Int
+    nbIdeas: Int
   }
 
   type Query {
-    topics: [Topic!]! @requireAuth
+    activeTopics: [Topic] @skipAuth
+    topics: [Topic!]! @skipAuth
     topic(id: Int!): Topic @requireAuth
   }
 

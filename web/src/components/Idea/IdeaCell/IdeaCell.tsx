@@ -9,6 +9,11 @@ export const QUERY = gql`
     idea: idea(id: $id) {
       id
       authorId
+      author {
+        id
+        firstname
+        lastname
+      }
       title
       problem
       solution
@@ -17,6 +22,11 @@ export const QUERY = gql`
       main
       specs
       captainId
+      canEdit
+      topics {
+        id
+        label
+      }
     }
   }
 `

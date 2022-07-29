@@ -1,126 +1,45 @@
-import humanize from 'humanize-string'
-
-import { Link, routes, navigate } from '@redwoodjs/router'
-import { useMutation } from '@redwoodjs/web'
-import { toast } from '@redwoodjs/web/toast'
-
-const DELETE_USER_MUTATION = gql`
-  mutation DeleteUserMutation($id: Int!) {
-    deleteUser(id: $id) {
-      id
-    }
-  }
-`
-
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-
-const jsonDisplay = (obj) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
+import { Link, routes, useParams } from '@redwoodjs/router'
+import Person, { Variant } from 'src/components/Person/Person'
+import { IconBroadcast, IconEdit } from '@tabler/icons'
+import { useAuth } from '@redwoodjs/auth'
+import { Badge } from '@mantine/core'
 
 const User = ({ user }) => {
-  const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
-    onCompleted: () => {
-      toast.success('User deleted')
-      navigate(routes.users())
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    },
-  })
+  const { currentUser } = useAuth()
 
-  const onDeleteClick = (id) => {
-    if (confirm('Are you sure you want to delete user ' + id + '?')) {
-      deleteUser({ variables: { id } })
-    }
-  }
+  const params = useParams()
 
   return (
     <>
-      <div className="rw-segment">
-        <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">
-            User {user.id} Detail
-          </h2>
+      <section className="flex flex-col justify-center">
+        <header className="">
+          <Person {...user} variant={Variant.portrait} />
         </header>
-        <table className="rw-table">
-          <tbody>
-            <tr>
-              <th>Id</th>
-              <td>{user.id}</td>
-            </tr>
-            <tr>
-              <th>Role</th>
-              <td>{formatEnum(user.role)}</td>
-            </tr>
-            <tr>
-              <th>Email</th>
-              <td>{user.email}</td>
-            </tr>
-            <tr>
-              <th>Username</th>
-              <td>{user.username}</td>
-            </tr>
-            <tr>
-              <th>Firstname</th>
-              <td>{user.firstname}</td>
-            </tr>
-            <tr>
-              <th>Lastname</th>
-              <td>{user.lastname}</td>
-            </tr>
-            <tr>
-              <th>Avatar</th>
-              <td>{user.avatar}</td>
-            </tr>
-            <tr>
-              <th>Strength id</th>
-              <td>{user.strengthId}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <nav className="rw-button-group">
-        <Link
-          to={routes.editUser({ id: user.id })}
-          className="rw-button rw-button-blue"
-        >
-          Edit
-        </Link>
-        <button
-          type="button"
-          className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(user.id)}
-        >
-          Delete
-        </button>
+      </section>
+      <nav className="flex flex-col w-fit">
+        {currentUser?.id === parseInt(params.id) ? (
+          <Link to={routes.editUser({ id: user.id })} className="text-gray-500">
+            <IconEdit />
+          </Link>
+        ) : (
+          <button
+            type="button"
+            className="text-gray-500 flex flex-row items-center border rounded p-2 py-1 border-gray-700"
+          >
+            <IconBroadcast className="mr-1" />
+            <span>follow</span>
+          </button>
+        )}
+        <div>
+          {user.skills?.map((skill) => (
+            <div className="px-2 py-1 rounded border">{skill.label}</div>
+          ))}
+        </div>
+        <div>
+          {user.skillSets.map((skillSet) => (
+            <Badge className="mr-2">{skillSet.label}</Badge>
+          ))}
+        </div>
       </nav>
     </>
   )

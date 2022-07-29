@@ -17,8 +17,11 @@ export const standard = defineScenario({
     one: { data: { label: topics[0], description: topics[0] } },
     two: { data: { label: topics[1], description: topics[1] } },
     three: { data: { label: topics[2], description: topics[2] } },
+    four: { data: { label: topics[3], description: topics[3] } },
+    five: { data: { label: topics[4], description: topics[4] } },
+    six: { data: { label: topics[5], description: topics[5] } },
   },
-  /** user: {
+  user: {
     one(scenario) {
       return {
         data: {
@@ -26,8 +29,40 @@ export const standard = defineScenario({
           lastname: 'Jones',
           username: 'Nick',
           email: 'bob@jones.com',
+          hashedPassword: 'someHash',
+          salt: 'someSalt',
         },
       }
     },
-  },*/
+  },
+  idea: {
+    one(scenario) {
+      return {
+        data: {
+          title: 'Some problem',
+          problem: 'Some really big problem',
+          topics: {
+            connect: Object.values({ ...scenario.topic })
+              .slice(2, 5)
+              .map(({ id }) => ({ id })),
+          },
+          author: { connect: { id: scenario.user.one.id } },
+        },
+      }
+    },
+    two(scenario) {
+      return {
+        data: {
+          title: 'Some other problem',
+          problem: 'Some other really, really big problem',
+          topics: {
+            connect: Object.values({ ...scenario.topic })
+              .slice(3, 6)
+              .map(({ id }) => ({ id })),
+          },
+          author: { connect: { id: scenario.user.one.id } },
+        },
+      }
+    },
+  },
 })

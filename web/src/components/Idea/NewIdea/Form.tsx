@@ -4,10 +4,15 @@ import {
   FieldError,
   Label,
   NumberField,
+  SelectField,
   TextField,
   TextAreaField,
   Submit,
+  Controller,
 } from '@redwoodjs/forms'
+import { MultiSelect, TextInput } from '@mantine/core'
+
+import TopicsCell from 'src/components/Topic/TopicsCell'
 
 const IdeaForm = (props) => {
   const onSubmit = (data) => {
@@ -28,13 +33,13 @@ const IdeaForm = (props) => {
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
-        What is it about?
+        Title
       </Label>
 
       <TextField
         name="title"
         defaultValue={props.idea?.title}
-        placeholder="Please provide an explicit title"
+        placeholder="What is it about? Be concise and precise"
         className="rw-input"
         errorClassName="rw-input rw-input-error"
         validation={{ required: true }}
@@ -47,7 +52,7 @@ const IdeaForm = (props) => {
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
-        Tell us more about what the issue is:
+        Core issue
       </Label>
 
       <TextAreaField
@@ -66,7 +71,7 @@ const IdeaForm = (props) => {
         className="rw-label"
         errorClassName="rw-label rw-label-error"
       >
-        Describe a rough idea of a solution (optional):
+        Solution lead(s) (optional):
       </Label>
 
       <TextAreaField
@@ -77,6 +82,35 @@ const IdeaForm = (props) => {
       />
 
       <FieldError name="solution" className="rw-field-error" />
+
+      <Controller
+        name="topics"
+        render={({ field }) => (
+          <>
+            <Label
+              name="topics"
+              className="rw-label"
+              errorClassName="rw-label rw-label-error"
+            >
+              Select the topics we should search to find your proposal:
+            </Label>
+            <TopicsCell
+              Component={({ topics }) => (
+                <MultiSelect
+                  className="rw-input border-none p-0"
+                  {...field}
+                  value={field?.value?.map((v) => `${v}`) ?? []}
+                  data={topics.map(({ id, label }) => ({
+                    value: `${id}`,
+                    label,
+                  }))}
+                />
+              )}
+            />
+            <FieldError name="topics" className="rw-field-error" />
+          </>
+        )}
+      />
 
       <div className="rw-button-group">
         <Submit disabled={props.loading} className="rw-button rw-button-blue">

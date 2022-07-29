@@ -1,8 +1,11 @@
-import humanize from 'humanize-string'
+import { Badge } from '@mantine/core'
 
 import { Link, routes, navigate } from '@redwoodjs/router'
 import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
+import { IconEdit, IconSquareX } from '@tabler/icons'
+import Person from 'src/components/Person/Person'
+import Tabs from './components/Tabs/Tabs'
 
 const DELETE_IDEA_MUTATION = gql`
   mutation DeleteIdeaMutation($id: Int!) {
@@ -11,39 +14,6 @@ const DELETE_IDEA_MUTATION = gql`
     }
   }
 `
-
-const formatEnum = (values: string | string[] | null | undefined) => {
-  if (values) {
-    if (Array.isArray(values)) {
-      const humanizedValues = values.map((value) => humanize(value))
-      return humanizedValues.join(', ')
-    } else {
-      return humanize(values as string)
-    }
-  }
-}
-
-const jsonDisplay = (obj) => {
-  return (
-    <pre>
-      <code>{JSON.stringify(obj, null, 2)}</code>
-    </pre>
-  )
-}
-
-const timeTag = (datetime) => {
-  return (
-    datetime && (
-      <time dateTime={datetime} title={datetime}>
-        {new Date(datetime).toUTCString()}
-      </time>
-    )
-  )
-}
-
-const checkboxInputTag = (checked) => {
-  return <input type="checkbox" checked={checked} disabled />
-}
 
 const Idea = ({ idea }) => {
   const [deleteIdea] = useMutation(DELETE_IDEA_MUTATION, {
@@ -64,61 +34,47 @@ const Idea = ({ idea }) => {
 
   return (
     <>
-      <div className="rw-segment">
-        <header className="rw-segment-header">
-          <h2 className="rw-heading rw-heading-secondary">Idea {idea.id} Detail</h2>
-        </header>
-        <table className="rw-table">
-          <tbody>
-            <tr>
-              <th>Id</th>
-              <td>{idea.id}</td>
-            </tr><tr>
-              <th>Author id</th>
-              <td>{idea.authorId}</td>
-            </tr><tr>
-              <th>Title</th>
-              <td>{idea.title}</td>
-            </tr><tr>
-              <th>Problem</th>
-              <td>{idea.problem}</td>
-            </tr><tr>
-              <th>Solution</th>
-              <td>{idea.solution}</td>
-            </tr><tr>
-              <th>Chat</th>
-              <td>{idea.chat}</td>
-            </tr><tr>
-              <th>Conversation</th>
-              <td>{idea.conversation}</td>
-            </tr><tr>
-              <th>Main</th>
-              <td>{idea.main}</td>
-            </tr><tr>
-              <th>Specs</th>
-              <td>{idea.specs}</td>
-            </tr><tr>
-              <th>Captain id</th>
-              <td>{idea.captainId}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <nav className="rw-button-group">
-        <Link
-          to={routes.editIdea({ id: idea.id })}
-          className="rw-button rw-button-blue"
-        >
-          Edit
-        </Link>
-        <button
-          type="button"
-          className="rw-button rw-button-red"
-          onClick={() => onDeleteClick(idea.id)}
-        >
-          Delete
-        </button>
-      </nav>
+      <section className="flex flex-col md:flex-row mt-12">
+        <article className="w-full md:w-1/2">
+          <header className="">
+            <div className="w-full flex flex-row justify-between">
+              <div className="flex flex-col">
+                <h1 className="text-xl font-sans">{idea.title}</h1>
+                <p className="text-xs font-sans">target:static</p>
+              </div>
+              {idea.canEdit && (
+                <nav className="rw-button-group">
+                  <Link
+                    to={routes.editIdea({ id: idea.id })}
+                    className="text-gray-500"
+                  >
+                    <IconEdit />
+                  </Link>
+                  <button
+                    type="button"
+                    className="ml-2 text-red-500"
+                    onClick={() => onDeleteClick(idea.id)}
+                  >
+                    <IconSquareX />
+                  </button>
+                </nav>
+              )}
+            </div>
+            <div className="flex flex-row flex-wrap mt-2">
+              {idea.topics.map((topic) => (
+                <Badge key={`Idea #${idea.id} - topics - #${topic.id}`}>
+                  {topic?.label}
+                </Badge>
+              ))}
+            </div>
+          </header>
+          <p className="mt-4 text-justify">{idea.problem}</p>
+        </article>
+        <aside className="w-full md:w-1/2 mt-4 md:mt-0 flex flex-row justify-end">
+          <Person {...idea.author} />
+        </aside>
+      </section>
+      <Tabs idea={idea} />
     </>
   )
 }

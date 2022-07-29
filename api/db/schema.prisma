@@ -33,7 +33,7 @@ model Member {
 model SkillSet {
   id     Int    @id @default(autoincrement())
   label  String @unique
-  users  User[] @relation("Skillsets")
+  users  User[] @relation("UserSkillsets")
   user   User[] @relation("SkillsetStrength")
   idea   Idea?  @relation(fields: [ideaId], references: [id])
   ideaId Int?
@@ -76,7 +76,7 @@ model User {
   strength            SkillSet?   @relation("SkillsetStrength", fields: [strengthId], references: [id])
   strengthId          Int?
   skills              Skill[]
-  skillSets           SkillSet[] @relation("Skillsets")
+  skillSets           SkillSet[] @relation("UserSkillsets")
   topics              Topic[]
   authorOf            Idea[]     @relation("UserAuthorOfIdea")
   championFor         Idea[]     @relation("UserChampionOfIdea")
@@ -90,6 +90,8 @@ model Idea {
   id           Int        @id @default(autoincrement())
   author       User       @relation("UserAuthorOfIdea", fields: [authorId], references: [id])
   authorId     Int
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @default(now())
   // Data.
   title        String     @unique
   problem      String     @unique
