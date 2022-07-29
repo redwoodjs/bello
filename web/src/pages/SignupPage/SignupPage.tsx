@@ -1,4 +1,4 @@
-import { Link, navigate, routes } from '@redwoodjs/router'
+import { Link, routes } from '@redwoodjs/router'
 import { useRef } from 'react'
 import {
   Form,
@@ -12,15 +12,12 @@ import { useAuth } from '@redwoodjs/auth'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import { useEffect } from 'react'
+import useOnboardingNavigation from 'src/hooks/useOnboardingNavigation'
 
 const SignupPage = () => {
   const { isAuthenticated, signUp } = useAuth()
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate(routes.homepage())
-    }
-  }, [isAuthenticated])
+  const onboardingNavigation = useOnboardingNavigation()
 
   // focus on email box on page load
   const usernameRef = useRef<HTMLInputElement>()
@@ -38,6 +35,8 @@ const SignupPage = () => {
     } else {
       // user is signed in automatically
       toast.success('Welcome!')
+
+      await onboardingNavigation()
     }
   }
 

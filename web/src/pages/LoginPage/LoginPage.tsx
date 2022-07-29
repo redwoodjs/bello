@@ -12,9 +12,12 @@ import { useAuth } from '@redwoodjs/auth'
 import { MetaTags } from '@redwoodjs/web'
 import { toast, Toaster } from '@redwoodjs/web/toast'
 import { useEffect } from 'react'
+import useOnboardingNavigation from 'src/hooks/useOnboardingNavigation'
 
 const LoginPage = () => {
-  const { isAuthenticated, getCurrentUser, logIn } = useAuth()
+  const { isAuthenticated, logIn } = useAuth()
+
+  const onboardNavigation = useOnboardingNavigation()
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -37,12 +40,7 @@ const LoginPage = () => {
     } else {
       toast.success('Welcome back!')
 
-      const user = await getCurrentUser()
-      if (!user.hasOnboarded) {
-        navigate(routes.onboarding())
-      } else {
-        navigate(routes.homepage())
-      }
+      await onboardNavigation()
     }
   }
 
