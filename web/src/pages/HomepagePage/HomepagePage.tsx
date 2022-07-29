@@ -116,7 +116,10 @@ const HomepagePage = () => {
             Component={({ topics }) => (
               <>
                 {topics.slice(0, 8).map((topic) => (
-                  <div className=" rounded border-white border p-2">
+                  <div
+                    key={`Homepage - Topics - ${topic.label}`}
+                    className=" rounded border-white border p-2"
+                  >
                     <p className="">{topic.label}</p>
                     <p className="text-sm">{topic.description}</p>
                   </div>
