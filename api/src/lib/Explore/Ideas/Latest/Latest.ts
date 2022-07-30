@@ -11,6 +11,7 @@ export default async function Latest() {
     take: LATEST_COUNT,
     select: {
       id: true,
+      createdAt: true,
       title: true,
       problem: true,
       topics: { select: { id: true, label: true } },

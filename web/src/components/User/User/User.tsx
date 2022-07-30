@@ -1,6 +1,6 @@
-import { Link, routes, useParams } from '@redwoodjs/router'
+import { useParams } from '@redwoodjs/router'
 import Person, { Variant } from 'src/components/Person/Person'
-import { IconBroadcast, IconEdit } from '@tabler/icons'
+import { IconBroadcast } from '@tabler/icons'
 import { useAuth } from '@redwoodjs/auth'
 import { Badge } from '@mantine/core'
 import Divider from 'src/components/Divider/Divider'

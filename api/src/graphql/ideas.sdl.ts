@@ -1,6 +1,7 @@
 export const schema = gql`
   type Idea {
     id: Int!
+    createdAt: Date!
     author: User!
     authorId: Int!
     title: String!
