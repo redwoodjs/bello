@@ -11,13 +11,13 @@ const User = () => {
           <Link to={routes.login()}>Sign In</Link>
         </li>
       )}
-      {isAuthenticated && (
+      {isAuthenticated && currentUser && (
         <>
           <li>
             <Link to={routes.dashboard()}>Dashboard</Link>
           </li>
           <li>
-            <Link to={routes.editUser({ id: currentUser?.id })}>You</Link>
+            <Link to={routes.editUser({ id: currentUser.id })}>You</Link>
           </li>
           <li>
             <Link to="#" onClick={logOut}>
