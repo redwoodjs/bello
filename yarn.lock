@@ -2249,6 +2249,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^7.3.0":
+  version: 7.3.0
+  resolution: "@faker-js/faker@npm:7.3.0"
+  checksum: bacced61aea90a793d7fe0525bc68b14b7d3e3a7b2655d9070f5e7d5c74e6e637aa6bfce7a720930ef38017493b1144ee51d4c217afc08981c3e1855cc536198
+  languageName: node
+  linkType: hard
+
 "@fastify/ajv-compiler@npm:^1.0.0":
   version: 1.1.0
   resolution: "@fastify/ajv-compiler@npm:1.1.0"
@@ -21413,6 +21420,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@faker-js/faker": ^7.3.0
     "@redwoodjs/core": ^2.1.0
     dayjs: ^1.11.4
   languageName: unknown
