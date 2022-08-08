@@ -1,17 +1,33 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, Role } from '@prisma/client'
 import { db } from 'api/src/lib/db'
+import { faker } from '@faker-js/faker'
+import _ from 'lodash'
 
-const users: Prisma.UserCreateInput[] = [
-  {
-    email: 'bob@jones.com',
-    username: 'Bob',
-    firstname: 'Robert',
-    lastname: 'Jones',
-    strength: { connect: { label: 'architect' } },
-    salt: 'minjx',
-    hashedPassword: 'hashedPassword',
-  },
+const ROLES: Role[] = [
+  'admin',
+  'coreteam',
+  'partner',
+  'startup',
+  'contributor',
+  'default',
 ]
+
+const STRENGTHS = ['architect', 'fullstack', 'frontend', 'backend', 'mobile']
+
+function user(): Prisma.UserCreateInput {
+  return {
+    email: faker.internet.email(),
+    username: faker.internet.userName(),
+    firstname: faker.name.firstName(),
+    lastname: faker.name.lastName(),
+    strength: { connect: { label: _.sample(STRENGTHS) } },
+    salt: faker.internet.password(),
+    hashedPassword: 'hashedPassword',
+    role: _.sample(ROLES),
+  }
+}
+
+const users: Prisma.UserCreateInput[] = [...Array(100)].map((_i) => user())
 
 export default async function () {
   for (let i in users) {

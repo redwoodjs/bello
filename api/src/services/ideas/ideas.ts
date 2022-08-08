@@ -7,11 +7,17 @@ import type {
 import { db } from 'src/lib/db'
 import Create from 'src/lib/Ideation/Idea/Create/Create'
 import Latest from 'src/lib/Explore/Ideas/Latest/Latest'
+import Champion from 'src/lib/Ideation/Idea/Champion/Champion'
+import Cast from 'src/lib/Community/Vote/Cast/Cast'
+
+export const CastVote = Cast
+
+export const ChampionIdea = Champion
 
 export const latest = Latest
 
 export const ideas: QueryResolvers['ideas'] = () => {
-  return db.idea.findMany()
+  return db.idea.findMany({ include: { votes: true } })
 }
 
 export const idea: QueryResolvers['idea'] = ({ id }) => {
@@ -60,4 +66,6 @@ export const Idea: IdeaResolvers = {
     db.idea.findUnique({ where: { id: root.id } }).technologies(),
   followers: (_obj, { root }) =>
     db.idea.findUnique({ where: { id: root.id } }).followers(),
+  votes: (_obj, { root }) =>
+    db.ideaVote.findMany({ where: { ideaId: root.id } }),
 }

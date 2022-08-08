@@ -17,6 +17,11 @@ enum Role {
   default
 }
 
+enum Vote {
+  downvote
+  upvote
+}
+
 model SkillSet {
   id           Int    @id @default(autoincrement())
   label        String @unique
@@ -69,6 +74,7 @@ model User {
   championFor         Idea[]     @relation("UserChampionOfIdea")
   captainFor          Idea[]     @relation("UserCaptainOfIdea")
   follows             Idea[]     @relation("UserInterestedInIdea")
+  votes               IdeaVote[]
   member              Member?
 }
 
@@ -108,4 +114,20 @@ model Idea {
   hires        SkillSet[]
   technologies Skill[]
   followers    User[]     @relation("UserInterestedInIdea")
+  votes        IdeaVote[]
+}
+
+
+model IdeaVote {
+  // Meta.
+  id           Int        @id @default(autoincrement())
+  idea         Idea @relation(fields:[ideaId], references: [id])
+  ideaId       Int
+  user         User @relation(fields:[userId], references: [id])
+  userId       Int
+  createdAt    DateTime @default(now())
+  // Data
+  vote         Vote
+
+  @@unique([ideaId, userId])
 }

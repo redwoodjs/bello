@@ -11,6 +11,11 @@ export const QUERY = gql`
         id
         label
       }
+      votes {
+        id
+        userId
+        vote
+      }
     }
   }
 `

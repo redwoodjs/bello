@@ -21,9 +21,25 @@ export const QUERY = gql`
       main
       specs
       captainId
+      captain {
+        id
+        firstname
+        lastname
+      }
+      champions {
+        id
+        firstname
+        lastname
+      }
       topics {
         id
         label
+      }
+      votes {
+        id
+        createdAt
+        userId
+        vote
       }
     }
     topics {

@@ -1,17 +1,25 @@
 import { db } from '$api/src/lib/db'
+import { Topic, Vote } from '@prisma/client'
 import { ideas as IdeaSeeds } from 'api/src/seeds/ideas'
 import dayjs from 'dayjs'
+import _ from 'lodash'
+
+const VOTE_TYPES: Vote[] = ['upvote', 'downvote']
 
 export default async function ideas() {
   const topics = await db.topic.findMany({ select: { id: true } })
 
+  const users = await db.user.findMany({
+    select: { id: true },
+  })
+
   const user = await db.user.findFirst()
 
-  for (const idea of IdeaSeeds) {
-    const randomTopic = topics[~~(Math.random() * topics.length)]
+  for (const data of IdeaSeeds) {
+    const randomTopic = random<Partial<Topic>>(topics)
 
     const ideaData = {
-      ...idea,
+      ...data,
       topics: { connect: { id: randomTopic.id } },
       author: { connect: { id: user.id } },
     }
@@ -20,7 +28,9 @@ export default async function ideas() {
       .findUnique({ where: { title: ideaData.title } })
       .then(async (existingIdea) => {
         if (!existingIdea) {
-          await db.idea.create({ data: ideaData })
+          const idea = await db.idea.create({ data: ideaData })
+
+          await createVotes(idea, users)
         }
       })
   }
@@ -53,4 +63,20 @@ async function sortLatestOut() {
       }
     }
   }
+}
+
+async function createVotes(idea, users) {
+  const voters = _.sampleSize(users, _.random(12, users.length, false))
+
+  await db.ideaVote.createMany({
+    data: voters.map((voter) => ({
+      userId: voter.id,
+      ideaId: idea.id,
+      vote: _.sample(VOTE_TYPES),
+    })),
+  })
+}
+
+const random = <T = unknown>(arr: T[]): T => {
+  return arr[~~(Math.random() * arr.length)]
 }

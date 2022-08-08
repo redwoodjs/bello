@@ -71,7 +71,11 @@ const Idea = ({ idea }) => {
           <p className="mt-4 text-justify">{idea.problem}</p>
         </article>
         <aside className="w-full md:w-1/2 mt-4 md:mt-0 flex flex-col justify-start items-center">
-          <Person {...idea.author} />
+          <Person {...idea.author} capacity="author" />
+          {idea?.captain && <Person {...idea.captain} capacity="captain" />}
+          {idea.champions?.map((champion) => (
+            <Person {...champion} capacity="champion" />
+          ))}
         </aside>
       </section>
       <Tabs idea={idea} />
