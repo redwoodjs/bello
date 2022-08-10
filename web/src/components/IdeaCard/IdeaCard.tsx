@@ -27,27 +27,31 @@ const Standard: React.FC<StandardProps> = ({ idea, noText = false }) => (
   <Link to={routes.idea({ id: idea.id })} className="">
     <div
       key={`Latest - ${idea.title}`}
-      className={`border pb-12 relative rounded p-4 hover:shadow-lg h-full ${
+      className={`border flex flex-col h-full border-amber-400 rounded hover:shadow-lg h-full ${
         isNew(idea) ? 'rounded-br-3xl' : ''
       }`}
     >
-      <p className="text-lg font-bold text-gray-700">{idea.title}</p>
-      <div className="mt-1">
-        {idea?.topics?.map((topic) => (
-          <Badge
-            key={`IdeaCard - Topic - ${topic.label}`}
-            color={BadgeColors.topic}
-          >
-            {topic.label}
-          </Badge>
-        ))}
-      </div>
-      {!noText && <p className="mt-4">{idea.problem.substr(0, 130)}</p>}
-      <div className=" absolute bottom-0 right-0 p-4 w-full">
+      <p className="text-lg font-bold bg-amber-600 p-4 text-white">
+        {idea.title}
+      </p>
+      <div className="p-4 flex flex-col grow justify-between">
+        <div>
+          <div className="mt-1">
+            {idea?.topics?.map((topic) => (
+              <Badge
+                key={`IdeaCard - Topic - ${topic.label}`}
+                color={BadgeColors.topic}
+              >
+                {topic.label}
+              </Badge>
+            ))}
+          </div>
+          {!noText && <p className="mt-4">{idea.problem.substr(0, 130)}</p>}
+        </div>
         <div className="grid grid-cols-2 pt-2 items-center">
           <VoteBar
             ideaId={idea.id}
-            count={idea.count}
+            count={{ ...idea.count, total: idea.champions.length }}
             userVote={idea.userVote}
           />
           {!isNew(idea) && (

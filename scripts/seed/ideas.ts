@@ -1,5 +1,5 @@
 import { db } from '$api/src/lib/db'
-import { Topic, Vote } from '@prisma/client'
+import { Vote } from '@prisma/client'
 import { ideas as IdeaSeeds } from 'api/src/seeds/ideas'
 import dayjs from 'dayjs'
 import _ from 'lodash'
@@ -13,15 +13,18 @@ export default async function ideas() {
     select: { id: true },
   })
 
-  const user = await db.user.findFirst()
+  const coreteam = await db.user.findMany({
+    select: { id: true },
+    where: { role: { in: ['coreteam'] } },
+  })
 
   for (const data of IdeaSeeds) {
-    const randomTopic = random<Partial<Topic>>(topics)
+    const randomTopic = _.sample(topics)
 
     const ideaData = {
       ...data,
       topics: { connect: { id: randomTopic.id } },
-      author: { connect: { id: user.id } },
+      author: { connect: { id: _.sample(users).id } },
     }
 
     await db.idea
@@ -31,6 +34,8 @@ export default async function ideas() {
           const idea = await db.idea.create({ data: ideaData })
 
           await createVotes(idea, users)
+
+          await assignChampions(idea, coreteam)
         }
       })
   }
@@ -65,6 +70,29 @@ async function sortLatestOut() {
   }
 }
 
+/**
+ * Assign some core team members as Champions of an Idea.
+ * @param idea
+ * @param coreteam
+ */
+async function assignChampions(idea, coreteam) {
+  await db.idea.update({
+    where: { id: idea.id },
+    data: {
+      champions: {
+        connect: _.sampleSize(coreteam, 3)
+          .slice(0, _.random(0, 3, false))
+          .map((ct) => ({ id: ct.id })),
+      },
+    },
+  })
+}
+
+/**
+ * Generate some fake votes for an Idea.
+ * @param idea
+ * @param users
+ */
 async function createVotes(idea, users) {
   const voters = _.sampleSize(users, _.random(12, users.length, false))
 
@@ -75,8 +103,4 @@ async function createVotes(idea, users) {
       vote: _.sample(VOTE_TYPES),
     })),
   })
-}
-
-const random = <T = unknown>(arr: T[]): T => {
-  return arr[~~(Math.random() * arr.length)]
 }

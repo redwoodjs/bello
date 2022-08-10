@@ -1,4 +1,6 @@
+import { Tooltip } from '@mantine/core'
 import { IconThumbDown, IconThumbUp } from '@tabler/icons'
+import Pine from '../Icons/Pine'
 import useVote from './useVote'
 import VoteButton from './VoteButton'
 
@@ -20,9 +22,19 @@ const Votes = ({
       vote="downvote"
       onClick={() => castVote(ideaId, 'downvote')}
     />
-    <div className="border-t border-b flex flex-col justify-center items-center align-middle text-sm font-bold shadow-inner">
-      {total}
-    </div>
+    {total ? (
+      <Tooltip label={'This idea has Champions!'}>
+        <div className="border-t border-b flex flex-row justify-center items-center align-middle text-sm font-bold shadow-inner">
+          <Pine className="mr-2" />
+          {total}
+        </div>
+      </Tooltip>
+    ) : (
+      <div className="border-t border-b flex flex-row justify-center items-center align-middle text-sm font-bold shadow-inner">
+        -
+      </div>
+    )}
+
     <VoteButton
       canVote={canVote}
       Icon={IconThumbUp}

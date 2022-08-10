@@ -25,6 +25,7 @@ const style: Record<Variant, Classes> = {
 
 interface PersonProps extends Pick<FaceProps, 'capacity'>, User {
   variant: Variant
+  className?: string
 }
 
 const Person: React.FC<PersonProps> = ({
@@ -34,9 +35,10 @@ const Person: React.FC<PersonProps> = ({
   role,
   capacity,
   avatar,
+  className = '',
   variant = Variant.landscape,
 }) => (
-  <Link to={routes.user({ id })} className="h-fit">
+  <Link to={routes.user({ id })} className={`h-fit ${className}`}>
     <div className={style[variant].container}>
       <Face
         capacity={variant === Variant.landscape ? capacity : undefined}

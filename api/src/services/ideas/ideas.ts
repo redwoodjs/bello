@@ -28,9 +28,13 @@ export const ideas: QueryResolvers['ideas'] = async () => {
   for (const index in ideas) {
     let { votes, ...idea } = ideas[index]
 
-    const userIdeaVote = await db.ideaVote.findUnique({
-      where: { ideaId_userId: { ideaId: idea.id, userId } },
-    })
+    const userVote = userId
+      ? await db.ideaVote
+          .findUnique({
+            where: { ideaId_userId: { ideaId: idea.id, userId } },
+          })
+          .then((v) => v?.vote)
+      : undefined
 
     const count = {
       total: votes.length,
@@ -40,7 +44,7 @@ export const ideas: QueryResolvers['ideas'] = async () => {
 
     list.push({
       ...idea,
-      userVote: userIdeaVote?.vote,
+      userVote,
       count,
     })
   }

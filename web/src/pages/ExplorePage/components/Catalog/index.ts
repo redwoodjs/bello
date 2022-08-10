@@ -1,9 +1,9 @@
 import { Idea, Topic, Vote } from 'types/graphql'
 
 export enum SortOn {
-  champion = 'champion',
-  upvote = 'upvote',
-  downvote = 'downvote',
+  champion = 'Champions',
+  upvote = 'Upvotes',
+  downvote = 'Downvotes',
 }
 
 export interface SelectTopic extends Pick<Topic, 'id' | 'label'> {

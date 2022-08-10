@@ -1,7 +1,8 @@
-import { MultiSelect, Select } from '@mantine/core'
+import { Group, Text, MultiSelect, Select } from '@mantine/core'
 import IdeasCell from 'src/components/Idea/IdeasCell'
-import { SortOn } from '.'
 import useCatalog from './useCatalog'
+import { IconThumbUp, IconThumbDown } from '@tabler/icons'
+import Pine from 'src/components/Icons/Pine'
 
 const Catalog = () => {
   const { facets, search, onSortChange, onTopicChange, process } = useCatalog()
@@ -26,7 +27,22 @@ const Catalog = () => {
           <Select
             label="Sort by"
             value={search.sort}
-            data={Object.values(SortOn)}
+            itemComponent={SelectItem}
+            data={[
+              {
+                label: 'Champions',
+                value: 'champion',
+                description:
+                  'Find out the ideas supported by the Core Team - we need you here!',
+                image: <Pine />,
+              },
+              { label: 'Upvotes', image: <IconThumbUp />, value: 'upvote' },
+              {
+                label: 'Downvotes',
+                image: <IconThumbDown />,
+                value: 'downvote',
+              },
+            ]}
             onChange={onSortChange}
           />
         </nav>
@@ -35,5 +51,27 @@ const Catalog = () => {
     </section>
   )
 }
+
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+  image: string
+  label: string
+  description: string
+}
+
+const SelectItem = React.forwardRef<HTMLDivElement, ItemProps>(
+  ({ image, label, description, ...others }: ItemProps, ref) => (
+    <div ref={ref} {...others}>
+      <Group noWrap>
+        {image}
+        <div>
+          <Text size="sm">{label}</Text>
+          <Text size="xs" color="dimmed">
+            {description}
+          </Text>
+        </div>
+      </Group>
+    </div>
+  )
+)
 
 export default Catalog

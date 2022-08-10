@@ -33,7 +33,7 @@ const Idea = ({ idea }) => {
   }
 
   return (
-    <>
+    <div className="w-full lg:w-2/3 lg:m-auto">
       <section className="flex flex-col md:flex-row mt-12">
         <article className="w-full md:w-1/2">
           <header className="">
@@ -70,16 +70,18 @@ const Idea = ({ idea }) => {
           </header>
           <p className="mt-4 text-justify">{idea.problem}</p>
         </article>
-        <aside className="w-full md:w-1/2 mt-4 md:mt-0 flex flex-col justify-start items-center">
-          <Person {...idea.author} capacity="author" />
-          {idea?.captain && <Person {...idea.captain} capacity="captain" />}
-          {idea.champions?.map((champion) => (
-            <Person {...champion} capacity="champion" />
-          ))}
+        <aside className="w-full md:w-1/2 mt-4 md:mt-0  flex justify-end">
+          <div className="flex flex-col items-stretch">
+            <Person {...idea.author} capacity="author" className="" />
+            {idea?.captain && <Person {...idea.captain} capacity="captain" />}
+            {idea.champions?.map((champion) => (
+              <Person {...champion} capacity="champion" className="" />
+            ))}
+          </div>
         </aside>
       </section>
       <Tabs idea={idea} />
-    </>
+    </div>
   )
 }
 

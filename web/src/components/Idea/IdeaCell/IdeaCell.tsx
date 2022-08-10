@@ -13,6 +13,13 @@ export const QUERY = gql`
         id
         firstname
         lastname
+        avatar
+      }
+      champions {
+        id
+        firstname
+        lastname
+        avatar
       }
       title
       problem

@@ -90,7 +90,7 @@ export default <UseCatalog>function useCatalog() {
         case 'downvote':
           return b.count.downvotes - a.count.downvotes
         case 'champion':
-          throw new Error('Not implemented')
+          return b.champions.length - a.champions.length
       }
     },
     [activeSort]

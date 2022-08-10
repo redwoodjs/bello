@@ -1,3 +1,5 @@
+import { Tooltip } from '@mantine/core'
+
 const classes = {
   downvote: {
     button: 'flex-row border rounded-tl-xl rounded-bl-xl [&>span]:ml-2',
@@ -8,6 +10,7 @@ const classes = {
     active: 'bg-blue-200 border-blue-200',
   },
 }
+
 const VoteButton = ({
   onClick,
   Icon,
@@ -16,23 +19,25 @@ const VoteButton = ({
   vote = 'upvote',
   userVote = '',
 }) => (
-  <button
-    type="button"
-    disabled={!canVote}
-    onClick={(e) => {
-      e.preventDefault()
-      e.stopPropagation()
-      onClick()
-    }}
-    className={`shadow-inner px-2 flex ${
-      classes[vote].button
-    } justify-center items-center ${
-      userVote === vote ? classes[vote].active : ''
-    }`}
-  >
-    <Icon className={`text-${userVote ? 'cyan' : 'gray'}-500`} />{' '}
-    <span className="text-sm">{number}</span>
-  </button>
+  <Tooltip label="Please vote!">
+    <button
+      type="button"
+      disabled={!canVote}
+      onClick={(e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        onClick()
+      }}
+      className={`shadow-inner px-2 flex ${
+        classes[vote].button
+      } justify-center items-center ${
+        userVote === vote ? classes[vote].active : ''
+      }`}
+    >
+      <Icon className={`text-${userVote ? 'cyan' : 'gray'}-500`} />{' '}
+      <span className="text-sm">{number}</span>
+    </button>
+  </Tooltip>
 )
 
 export default VoteButton
