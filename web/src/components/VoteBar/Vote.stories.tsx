@@ -1,7 +1,7 @@
-import Vote from './Vote'
+import VoteBar from './VoteBar'
 
 export const generated = () => {
-  return <Vote />
+  return <VoteBar />
 }
 
 export default { title: 'Components/Vote' }

@@ -16,8 +16,36 @@ export const ChampionIdea = Champion
 
 export const latest = Latest
 
-export const ideas: QueryResolvers['ideas'] = () => {
-  return db.idea.findMany({ include: { votes: true } })
+export const ideas: QueryResolvers['ideas'] = async () => {
+  const userId = context?.currentUser?.id
+
+  let list = []
+
+  const ideas = await db.idea.findMany({
+    include: { champions: true, topics: true, votes: true },
+  })
+
+  for (const index in ideas) {
+    let { votes, ...idea } = ideas[index]
+
+    const userIdeaVote = await db.ideaVote.findUnique({
+      where: { ideaId_userId: { ideaId: idea.id, userId } },
+    })
+
+    const count = {
+      total: votes.length,
+      upvotes: votes.filter(({ vote }) => vote === 'upvote').length,
+      downvotes: votes.filter(({ vote }) => vote === 'downvote').length,
+    }
+
+    list.push({
+      ...idea,
+      userVote: userIdeaVote?.vote,
+      count,
+    })
+  }
+
+  return list
 }
 
 export const idea: QueryResolvers['idea'] = ({ id }) => {

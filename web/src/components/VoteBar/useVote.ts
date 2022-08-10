@@ -12,13 +12,13 @@ const MUTATION_CAST_VOTE = gql`
   }
 `
 
-export default function useVote({ votes }) {
-  const { isAuthenticated, currentUser } = useAuth()
+export default function useVote({ count }) {
+  const { isAuthenticated } = useAuth()
 
   const [castVote] = useMutation(MUTATION_CAST_VOTE, {
     refetchQueries: [{ query: QUERY }],
-    onCompleted(data) {
-      toast('Vote accepted!')
+    onCompleted() {
+      toast('Thanks for the feedback!')
     },
   })
 
@@ -27,14 +27,8 @@ export default function useVote({ votes }) {
     castVote(ideaId: Number, vote: Vote) {
       return castVote({ variables: { ideaId, input: { vote } } })
     },
-    upvotes: votes?.filter(({ vote }) => vote === 'upvote').length,
-    downvotes: votes?.filter(({ vote }) => vote === 'downvote').length,
-    total: votes?.length,
-    userVote:
-      isAuthenticated &&
-      currentUser &&
-      votes
-        ?.filter(({ userId }) => userId === currentUser?.id)
-        .reduce((a, i) => i.vote, ''),
+    downvotes: count.downvotes,
+    upvotes: count.upvotes,
+    total: count.total,
   }
 }

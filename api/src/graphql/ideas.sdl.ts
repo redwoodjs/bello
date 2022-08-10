@@ -12,6 +12,12 @@ export const schema = gql`
     vote: Vote!
   }
 
+  type Counts {
+    total: Int
+    upvotes: Int
+    downvotes: Int
+  }
+
   type Idea {
     id: Int!
     createdAt: Date!
@@ -32,7 +38,8 @@ export const schema = gql`
     technologies: [Skill]!
     followers: [User]!
     canEdit: Boolean
-    votes: [IdeaVote]
+    count: Counts
+    userVote: Vote
   }
 
   type Query {

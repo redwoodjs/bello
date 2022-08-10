@@ -1,72 +1,37 @@
-import { Badge, MultiSelect } from '@mantine/core'
-import { atom, useRecoilState } from 'recoil'
+import { MultiSelect, Select } from '@mantine/core'
 import IdeasCell from 'src/components/Idea/IdeasCell'
-import { Topic } from 'types/graphql'
-
-interface Facets {
-  topics: Array<Pick<Topic, 'id' | 'label'> & { active: boolean }>
-  sort: { champion: boolean }
-}
-
-export const node = atom<Facets>({
-  key: 'Catalog',
-  default: { topics: [], sort: { champion: false } },
-})
+import { SortOn } from '.'
+import useCatalog from './useCatalog'
 
 const Catalog = () => {
-  const [state, setState] = useRecoilState(node)
-
-  const activeTopics = React.useMemo(
-    () => state.topics.filter(({ active }) => active),
-    [state.topics]
-  )
-
-  const onTopicChange = React.useCallback(
-    (select) => {
-      setState((facets) => ({
-        ...facets,
-        topics: facets?.topics?.map((topic) => ({
-          ...topic,
-          active: select.includes(`${topic.id}`) ?? false,
-        })),
-      }))
-    },
-    [state, setState]
-  )
-
-  const filter = React.useCallback(
-    (idea) => {
-      if (state.topics.filter(({ active }) => active).length) {
-        return idea.topics.some(({ id }) =>
-          activeTopics.map(({ id }) => id).includes(id)
-        )
-      } else {
-        return true
-      }
-    },
-    [state]
-  )
+  const { facets, search, onSortChange, onTopicChange, process } = useCatalog()
 
   return (
     <section className="mt-6">
       <header className="sticky top-0 py-4 bg-white z-50">
         <h1>Catalog</h1>
-        <nav>
+        <nav className="grid grid-cols-2 gap-4">
           <MultiSelect
-            data={state.topics.map(({ id, label }) => ({
+            data={facets.topics.map(({ id, label }) => ({
               value: `${id}`,
               label,
             }))}
             label="Topics"
-            value={state.topics
+            value={facets.topics
               .filter(({ active }) => active)
               .map((topic) => `${topic.id}`)}
             placeholder="Filter one too many!"
             onChange={onTopicChange}
           />
+          <Select
+            label="Sort by"
+            value={search.sort}
+            data={Object.values(SortOn)}
+            onChange={onSortChange}
+          />
         </nav>
       </header>
-      <IdeasCell filter={filter} />
+      <IdeasCell process={process} />
     </section>
   )
 }

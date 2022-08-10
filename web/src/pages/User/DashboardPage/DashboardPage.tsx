@@ -15,7 +15,7 @@ const DashboardPage = () => {
             to={routes.newIdea()}
             className=" px-4 py-2 border rounded bg-amber-500 font-bold text-white"
           >
-            I have an Idea
+            Report an Idea
           </Link>
         </section>
       </header>

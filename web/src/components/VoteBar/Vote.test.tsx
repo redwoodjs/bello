@@ -1,6 +1,6 @@
 import { render } from '@redwoodjs/testing/web'
 
-import Vote from './Vote'
+import VoteBar from './VoteBar'
 
 //   Improve this test with help from the Redwood Testing Doc:
 //    https://redwoodjs.com/docs/testing#testing-components
@@ -8,7 +8,7 @@ import Vote from './Vote'
 describe('Vote', () => {
   it('renders successfully', () => {
     expect(() => {
-      render(<Vote />)
+      render(<VoteBar />)
     }).not.toThrow()
   })
 })

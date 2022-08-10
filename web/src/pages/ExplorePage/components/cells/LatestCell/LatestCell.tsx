@@ -1,4 +1,5 @@
-import IdeaCard from 'src/components/IdeaCard/IdeaCard'
+import { Skeleton } from '@mantine/core'
+import IdeaCard, { Variant } from 'src/components/IdeaCard/IdeaCard'
 
 export const QUERY = gql`
   query LATEST_CELL {
@@ -11,26 +12,32 @@ export const QUERY = gql`
         id
         label
       }
-      votes {
-        id
-        userId
-        vote
-      }
     }
   }
 `
 
+export const Loading = () => (
+  <>
+    {[...Array(6)].map((_x, k) => (
+      <React.Fragment key={`LatestCell - Loading - ${k}`}>
+        <Skeleton height={12} radius="xl" />
+        <Skeleton height={8} radius="xl" />
+        <Skeleton height={8} mt={6} radius="xl" />
+      </React.Fragment>
+    ))}
+  </>
+)
+
 export const Success = ({ ideas }) => (
   <>
-    {ideas?.length && (
-      <section className="w-full flex flex-col justify-center items-center mt-12">
-        <h1 className="text-4xl font-serif">Fresh from the top of our heads</h1>
-        <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 mt-12">
-          {ideas?.map((idea) => (
-            <IdeaCard key={`LatestCell - ${idea.title}`} idea={idea} />
-          ))}
-        </div>
-      </section>
-    )}
+    {ideas?.length &&
+      ideas?.map((idea) => (
+        <IdeaCard
+          key={`LatestCell - ${idea.title}`}
+          idea={idea}
+          variant={Variant.new}
+          noText
+        />
+      ))}
   </>
 )
