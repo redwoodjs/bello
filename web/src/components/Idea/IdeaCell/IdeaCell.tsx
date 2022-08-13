@@ -21,6 +21,13 @@ export const QUERY = gql`
         lastname
         avatar
       }
+      count {
+        upvotes
+        downvotes
+        total
+      }
+      userVote
+      status
       title
       problem
       solution

@@ -100,4 +100,31 @@ export const Idea: IdeaResolvers = {
     db.idea.findUnique({ where: { id: root.id } }).followers(),
   votes: (_obj, { root }) =>
     db.ideaVote.findMany({ where: { ideaId: root.id } }),
+  count: async (_obj, { root }) => {
+    const votes = await db.ideaVote.findMany({ where: { ideaId: root.id } })
+
+    const total = await db.idea
+      .findUnique({ where: { id: root.id } })
+      .champions()
+      .then((c) => c.length)
+
+    return {
+      total,
+      upvotes: votes.filter(({ vote }) => vote === 'upvote').length,
+      downvotes: votes.filter(({ vote }) => vote === 'downvote').length,
+    }
+  },
+  userVote: (_obj, { root }) => {
+    const userId = context.currentUser?.id
+
+    if (!userId) {
+      return undefined
+    }
+
+    return db.ideaVote
+      .findUnique({
+        where: { ideaId_userId: { ideaId: root.id, userId } },
+      })
+      .then((v) => v?.vote)
+  },
 }

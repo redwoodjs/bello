@@ -1,5 +1,6 @@
 import { Tooltip } from '@mantine/core'
 import { IconThumbDown, IconThumbUp } from '@tabler/icons'
+import classNames from 'classnames'
 import Pine from '../Icons/Pine'
 import useVote from './useVote'
 import VoteButton from './VoteButton'
@@ -12,8 +13,9 @@ const Votes = ({
   total,
   userVote,
   castVote,
+  className = '',
 }) => (
-  <div className="grid grid-cols-3">
+  <div className={classNames(className, 'grid grid-cols-3')}>
     <VoteButton
       canVote={canVote}
       Icon={IconThumbDown}
@@ -45,6 +47,13 @@ const Votes = ({
   </div>
 )
 
-export default function VoteBar({ count, userVote, ideaId }) {
-  return <Votes {...useVote({ count })} userVote={userVote} ideaId={ideaId} />
+export default function VoteBar({ className, count, userVote, ideaId }) {
+  return (
+    <Votes
+      {...useVote({ count })}
+      userVote={userVote}
+      ideaId={ideaId}
+      className={className}
+    />
+  )
 }

@@ -5,6 +5,8 @@ import { useMutation } from '@redwoodjs/web'
 import { toast } from '@redwoodjs/web/toast'
 import { IconEdit, IconSquareX } from '@tabler/icons'
 import Person from 'src/components/Person/Person'
+import StatusIcon from 'src/components/StatusIcon/StatusIcon'
+import VoteBar from 'src/components/VoteBar/VoteBar'
 import Tabs from './components/Tabs/Tabs'
 
 const DELETE_IDEA_MUTATION = gql`
@@ -39,7 +41,10 @@ const Idea = ({ idea }) => {
           <header className="">
             <div className="w-full flex flex-row justify-between">
               <div className="flex flex-col">
-                <h1 className="text-xl font-sans">{idea.title}</h1>
+                <h1 className="text-xl font-sans flex flex-row items-center">
+                  <StatusIcon status={idea.status} className="mr-1" />
+                  {idea.title}
+                </h1>
                 <p className="text-xs font-sans">target:static</p>
               </div>
               {idea.canEdit && (
@@ -69,6 +74,12 @@ const Idea = ({ idea }) => {
             </div>
           </header>
           <p className="mt-4 text-justify">{idea.problem}</p>
+          <VoteBar
+            ideaId={idea.id}
+            count={idea.count}
+            userVote={idea.userVote}
+            className="mt-4"
+          />
         </article>
         <aside className="w-full md:w-1/2 mt-4 md:mt-0  flex justify-end">
           <div className="flex flex-col items-stretch">

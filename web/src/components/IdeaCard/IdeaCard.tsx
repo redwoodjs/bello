@@ -49,18 +49,20 @@ const Standard: React.FC<StandardProps> = ({ idea, noText = false }) => (
           </div>
           {!noText && <p className="mt-4">{idea.problem.substr(0, 130)}</p>}
         </div>
-        <div className="grid grid-cols-3 pt-2 items-center">
+        <div className="grid grid-cols-2 pt-2 items-center">
           <VoteBar
             ideaId={idea.id}
             count={{ ...idea.count, total: idea.champions.length }}
             userVote={idea.userVote}
           />
-          <div className="flex flex-row">
-            <StatusIcon status={idea.status} className="ml-2" />
+          <div className="flex flex-row justify-end items-center">
+            <StatusIcon status={idea.status} />
+            {!isNew(idea) && (
+              <p className="ml-2 text-right text-sm font-bold text-red-700">
+                New!
+              </p>
+            )}
           </div>
-          {!isNew(idea) && (
-            <p className="text-right text-sm font-bold text-red-700">New!</p>
-          )}
         </div>
       </div>
     </div>
