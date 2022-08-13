@@ -4,6 +4,7 @@ import isNew from 'src/helpers/isNew'
 import { BadgeColors } from 'src/constants'
 import { Idea } from 'types/graphql'
 import VoteBar from '../VoteBar/VoteBar'
+import StatusIcon from '../StatusIcon/StatusIcon'
 
 export enum Variant {
   brief = 'brief',
@@ -48,12 +49,15 @@ const Standard: React.FC<StandardProps> = ({ idea, noText = false }) => (
           </div>
           {!noText && <p className="mt-4">{idea.problem.substr(0, 130)}</p>}
         </div>
-        <div className="grid grid-cols-2 pt-2 items-center">
+        <div className="grid grid-cols-3 pt-2 items-center">
           <VoteBar
             ideaId={idea.id}
             count={{ ...idea.count, total: idea.champions.length }}
             userVote={idea.userVote}
           />
+          <div className="flex flex-row">
+            <StatusIcon status={idea.status} className="ml-2" />
+          </div>
           {!isNew(idea) && (
             <p className="text-right text-sm font-bold text-red-700">New!</p>
           )}

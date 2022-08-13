@@ -17,6 +17,12 @@ enum Role {
   default
 }
 
+enum IdeaStatus {
+  help
+  progress
+  done
+}
+
 enum Vote {
   downvote
   upvote
@@ -98,6 +104,7 @@ model Idea {
   authorId     Int
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @default(now())
+  status       IdeaStatus @default(help)
   // Data.
   title        String     @unique
   problem      String     @unique

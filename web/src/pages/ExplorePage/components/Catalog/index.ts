@@ -16,6 +16,7 @@ export enum Facets {
 }
 
 export interface FacetsStore {
+  helper: boolean
   topics: Array<SelectTopic>
   sort: Record<SortOn, boolean>
   sortOrder: SortOrder

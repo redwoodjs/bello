@@ -1,4 +1,10 @@
 export const schema = gql`
+  enum IdeaStatus {
+    help
+    progress
+    done
+  }
+
   enum Vote {
     downvote
     upvote
@@ -23,6 +29,7 @@ export const schema = gql`
     createdAt: Date!
     author: User!
     authorId: Int!
+    status: IdeaStatus!
     title: String!
     problem: String!
     solution: String

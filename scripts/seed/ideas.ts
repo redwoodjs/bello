@@ -1,8 +1,10 @@
 import { db } from '$api/src/lib/db'
-import { Vote } from '@prisma/client'
+import { Vote, IdeaStatus } from '@prisma/client'
 import { ideas as IdeaSeeds } from 'api/src/seeds/ideas'
 import dayjs from 'dayjs'
 import _ from 'lodash'
+
+const IDEA_STATUS: IdeaStatus[] = ['help', 'progress', 'done']
 
 const VOTE_TYPES: Vote[] = ['upvote', 'downvote']
 
@@ -23,6 +25,7 @@ export default async function ideas() {
 
     const ideaData = {
       ...data,
+      status: _.sample(IDEA_STATUS),
       topics: { connect: { id: randomTopic.id } },
       author: { connect: { id: _.sample(users).id } },
     }

@@ -14,6 +14,7 @@ export const QUERY = gql`
       id
       createdAt
       authorId
+      status
       title
       problem
       solution

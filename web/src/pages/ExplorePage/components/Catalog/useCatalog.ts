@@ -7,6 +7,7 @@ import node from './node'
 export interface UseCatalogReturn {
   facets: FacetsStore
   process: (ideas: Idea[]) => Idea[]
+  onHelper: (value: boolean) => void
   onSortChange: (select: string) => void
   onTopicChange: (select: string[]) => void
   search: { sort: SortOn; topics: SelectTopic[] }
@@ -22,6 +23,13 @@ export default <UseCatalog>function useCatalog() {
   /**
    * OnChange events
    */
+  const onHelper = React.useCallback(
+    (helper) => {
+      setState((facets) => ({ ...facets, helper }))
+    },
+    [facets, setState]
+  )
+
   const onTopicChange = React.useCallback(
     (select) => {
       setState((facets) => ({
@@ -72,6 +80,10 @@ export default <UseCatalog>function useCatalog() {
    */
   const filter = React.useCallback(
     (idea) => {
+      if (facets.helper === true && idea.status !== 'help') {
+        return false
+      }
+
       if (facets.topics.filter(({ active }) => active).length) {
         return idea.topics.some(({ id }) =>
           activeTopics.map(({ id }) => id).includes(id)
@@ -110,6 +122,7 @@ export default <UseCatalog>function useCatalog() {
 
   return {
     facets,
+    onHelper,
     onTopicChange,
     onSortChange,
     process,

@@ -1,4 +1,4 @@
-import { Group, Text, MultiSelect, Select } from '@mantine/core'
+import { Group, Text, MultiSelect, Select, Checkbox } from '@mantine/core'
 import IdeasCell from 'src/components/Idea/IdeasCell'
 import useCatalog from './useCatalog'
 import { IconThumbUp, IconThumbDown } from '@tabler/icons'
@@ -7,7 +7,8 @@ import node from './node'
 import SortOrderButton from 'src/components/SortOrderButton/SortOrderButton'
 
 const Catalog = () => {
-  const { facets, search, onSortChange, onTopicChange, process } = useCatalog()
+  const { facets, search, onHelper, onSortChange, onTopicChange, process } =
+    useCatalog()
 
   return (
     <section className="mt-6">
@@ -50,6 +51,12 @@ const Catalog = () => {
             />
             <SortOrderButton node={node} className="m-2" />
           </div>
+          <Checkbox
+            label="I want to help"
+            onClick={(e) => {
+              onHelper(Boolean(e.target?.checked))
+            }}
+          />
         </nav>
       </header>
       <IdeasCell process={process} />
