@@ -1,4 +1,5 @@
 import { useRecoilState } from 'recoil'
+import { SortOrder } from 'src/components/SortOrderButton/SortOrderButton'
 import { Idea } from 'types/graphql'
 import { FacetsStore, SelectTopic, SortOn } from '.'
 import node from './node'
@@ -84,21 +85,27 @@ export default <UseCatalog>function useCatalog() {
 
   const sort = React.useCallback(
     (a: Idea, b: Idea) => {
+      const [primary, secondary] =
+        facets.sortOrder === undefined ||
+        facets.sortOrder === SortOrder.descending
+          ? [b, a]
+          : [a, b]
+
       switch (activeSort) {
         case 'upvote':
-          return b.count.upvotes - a.count.upvotes
+          return primary.count.upvotes - secondary.count.upvotes
         case 'downvote':
-          return b.count.downvotes - a.count.downvotes
+          return primary.count.downvotes - secondary.count.downvotes
         case 'champion':
-          return b.champions.length - a.champions.length
+          return primary.champions.length - secondary.champions.length
       }
     },
-    [activeSort]
+    [activeSort, facets.sortOrder]
   )
 
   const process = React.useCallback(
     (ideas) => ideas.filter(filter).sort(sort),
-    [filter, sort]
+    [filter, sort, facets.sortOrder]
   )
 
   return {

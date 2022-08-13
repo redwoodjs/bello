@@ -1,4 +1,4 @@
-import { Idea, Topic, Vote } from 'types/graphql'
+import { Topic } from 'types/graphql'
 
 export enum SortOn {
   champion = 'Champions',
@@ -18,4 +18,5 @@ export enum Facets {
 export interface FacetsStore {
   topics: Array<SelectTopic>
   sort: Record<SortOn, boolean>
+  sortOrder: SortOrder
 }

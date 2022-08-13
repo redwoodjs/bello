@@ -3,6 +3,8 @@ import IdeasCell from 'src/components/Idea/IdeasCell'
 import useCatalog from './useCatalog'
 import { IconThumbUp, IconThumbDown } from '@tabler/icons'
 import Pine from 'src/components/Icons/Pine'
+import node from './node'
+import SortOrderButton from 'src/components/SortOrderButton/SortOrderButton'
 
 const Catalog = () => {
   const { facets, search, onSortChange, onTopicChange, process } = useCatalog()
@@ -24,27 +26,30 @@ const Catalog = () => {
             placeholder="Filter one too many!"
             onChange={onTopicChange}
           />
-          <Select
-            label="Sort by"
-            value={search.sort}
-            itemComponent={SelectItem}
-            data={[
-              {
-                label: 'Champions',
-                value: 'champion',
-                description:
-                  'Find out the ideas supported by the Core Team - we need you here!',
-                image: <Pine />,
-              },
-              { label: 'Upvotes', image: <IconThumbUp />, value: 'upvote' },
-              {
-                label: 'Downvotes',
-                image: <IconThumbDown />,
-                value: 'downvote',
-              },
-            ]}
-            onChange={onSortChange}
-          />
+          <div className="flex flex-row-reverse items-end">
+            <Select
+              label="Sort by"
+              value={search.sort}
+              itemComponent={SelectItem}
+              data={[
+                {
+                  label: 'Champions',
+                  value: 'champion',
+                  description:
+                    'Find out the ideas supported by the Core Team - we need you here!',
+                  image: <Pine />,
+                },
+                { label: 'Upvotes', image: <IconThumbUp />, value: 'upvote' },
+                {
+                  label: 'Downvotes',
+                  image: <IconThumbDown />,
+                  value: 'downvote',
+                },
+              ]}
+              onChange={onSortChange}
+            />
+            <SortOrderButton node={node} className="m-2" />
+          </div>
         </nav>
       </header>
       <IdeasCell process={process} />
