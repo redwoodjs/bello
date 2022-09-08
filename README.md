@@ -1,6 +1,21 @@
 # README
 
-Welcome to [RedwoodJS](https://redwoodjs.com)!
+Welcome to [Bello](https://github.com/redwoodjs/bello)!
+
+## Purpose
+
+Bello is a social network targeted at focusing the community's interest into RedwoodJS and turning it into merged PR.
+
+### **Idea User Flow and Lifecycle**
+
+1. Author creates an Idea (following ReadmeDD process)
+2. Author manages personal list of Ideas
+3. Author iterates on specific Idea(s)
+4. Author publishes a specific Idea to the community
+5. Author evangelizes a specific Idea
+6. Community members express _interest_ in an Idea
+7. Author evaluates interest in an Idea over time
+8. Author views the list of individuals who are interested in an Idea
 
 > **Prerequisites**
 >
