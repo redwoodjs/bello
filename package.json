@@ -9,7 +9,7 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.3.0",
-    "@redwoodjs/core": "^3.0.1"
+    "@redwoodjs/core": "^3.5.0"
   },
   "eslintConfig": {
     "extends": "@redwoodjs/eslint-config",

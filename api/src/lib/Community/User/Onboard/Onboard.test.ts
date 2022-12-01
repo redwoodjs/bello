@@ -3,14 +3,7 @@ import { onboardUser } from 'src/services/users/users'
 
 describe('Community - User - Onboard', function () {
   scenario('Records a new user.', async function (scenario) {
-    const user = await db.user.create({
-      data: {
-        email: 'bob@jones.com',
-        username: 'nick',
-      },
-    })
-
-    mockCurrentUser(user)
+    mockCurrentUser(scenario.user.one)
 
     const input = {
       firstname: 'Bob',

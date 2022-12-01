@@ -85,5 +85,5 @@ export const Success = ({
     }))
   }, [])
 
-  return <Ideas ideas={process(ideas)} />
+  return <Ideas ideas={process?.(ideas) ?? ideas} />
 }
