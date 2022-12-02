@@ -24,8 +24,9 @@ const NewIdea = () => {
   })
 
   const onSave = (input) => {
+    console.warn('Please implement proper topics.')
     const castInput = Object.assign(input, {
-      topics: input.topics.map(parseInt),
+      topics: [1, 3],
     })
 
     createIdea({ variables: { input: castInput } })

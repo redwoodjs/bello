@@ -4,39 +4,40 @@ datasource db {
 }
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = "native"
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+}
+
+enum BusinessEntityType {
+  partner
+  startup
 }
 
 enum Role {
   admin
   coreteam
-  partner
-  startup
   contributor
   default
 }
 
-model Member {
-  // We keep community informations here.
-  // Meta.
-  id          Int     @id @default(autoincrement())
-  user        User    @relation(fields: [userId], references: [id])
-  userId      Int
-  // Data.
-  title       String?
-  description String?
-  linkedin    String?
-  discord     String?
+enum IdeaStatus {
+  help
+  progress
+  done
+}
+
+enum Vote {
+  downvote
+  upvote
 }
 
 model SkillSet {
-  id     Int    @id @default(autoincrement())
-  label  String @unique
-  users  User[] @relation("UserSkillsets")
-  user   User[] @relation("SkillsetStrength")
-  idea   Idea?  @relation(fields: [ideaId], references: [id])
-  ideaId Int?
+  id           Int    @id @default(autoincrement())
+  label        String @unique
+  users        User[] @relation("UserSkillsets")
+  strengthOf   User[] @relation("SkillsetStrength")
+  idea         Idea?  @relation(fields: [ideaId], references: [id])
+  ideaId       Int?
 }
 
 model Skill {
@@ -56,33 +57,71 @@ model Topic {
   ideaId      Int?
 }
 
+model BusinessEntity {
+  id              Int    @id @default(autoincrement())
+  type            BusinessEntityType
+  label           String @unique
+  description     String @unique
+  url             String? @unique
+  admin           User @relation("BusinessEntityAdmin", fields:[adminId],references: [id])
+  adminId         Int @unique
+  team            User[] @relation("BusinessEntityTeam")
+  recommendations Recommendation[]
+}
+
+model Recommendation {
+  id                Int    @id @default(autoincrement())
+  businessEntity    BusinessEntity @relation(fields:[businessEntityId],references:[id])
+  businessEntityId  Int
+  user              User @relation(fields:[userId],references: [id])
+  userId            Int
+  text              String
+}
+
 model User {
   // Meta.
-  id                  Int        @id @default(autoincrement())
-  role                Role       @default(default)
+  id                    Int        @id @default(autoincrement())
+  role                  Role       @default(default)
   // Data.
-  hasOnboarded        Boolean    @default(false)
-  email               String     @unique
-  username            String?    @unique
-  firstname           String?
-  lastname            String?
-  avatar              String?
+  hasOnboarded          Boolean    @default(false)
+  email                 String     @unique
+  username              String?    @unique
+  firstname             String?
+  lastname              String?
+  avatar                String?
   // Auth
-  hashedPassword      String
-  salt                String
-  resetToken          String?
-  resetTokenExpiresAt DateTime?
+  hashedPassword        String
+  salt                  String
+  resetToken            String?
+  resetTokenExpiresAt   DateTime?
   // Relationships.
-  strength            SkillSet?   @relation("SkillsetStrength", fields: [strengthId], references: [id])
-  strengthId          Int?
-  skills              Skill[]
-  skillSets           SkillSet[] @relation("UserSkillsets")
-  topics              Topic[]
-  authorOf            Idea[]     @relation("UserAuthorOfIdea")
-  championFor         Idea[]     @relation("UserChampionOfIdea")
-  captainFor          Idea[]     @relation("UserCaptainOfIdea")
-  follows             Idea[]     @relation("UserInterestedInIdea")
-  member              Member[]
+  strength              SkillSet?   @relation("SkillsetStrength", fields: [strengthId], references: [id])
+  strengthId            Int?
+  skills                Skill[]
+  skillSets             SkillSet[] @relation("UserSkillsets")
+  topics                Topic[]
+  adminOfBusinessEntity BusinessEntity? @relation("BusinessEntityAdmin")
+  memberOf              BusinessEntity[] @relation("BusinessEntityTeam")
+  authorOf              Idea[]     @relation("UserAuthorOfIdea")
+  championFor           Idea[]     @relation("UserChampionOfIdea")
+  captainFor            Idea[]     @relation("UserCaptainOfIdea")
+  follows               Idea[]     @relation("UserInterestedInIdea")
+  votes                 IdeaVote[]
+  recommendations       Recommendation[]
+  member                Member?
+}
+
+model Member {
+  // We keep community informations here.
+  // Meta.
+  id          Int     @id @default(autoincrement())
+  user        User @relation(fields:[userId],references: [id]) // <-- This is the right way to do a one-to-one.
+  userId      Int @unique // <-- This is the right way to do a one-to-one.
+  // Data.
+  title       String?
+  description String?
+  linkedin    String?
+  discord     String?
 }
 
 model Idea {
@@ -92,6 +131,7 @@ model Idea {
   authorId     Int
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @default(now())
+  status       IdeaStatus @default(help)
   // Data.
   title        String     @unique
   problem      String     @unique
@@ -108,4 +148,20 @@ model Idea {
   hires        SkillSet[]
   technologies Skill[]
   followers    User[]     @relation("UserInterestedInIdea")
+  votes        IdeaVote[]
+}
+
+
+model IdeaVote {
+  // Meta.
+  id           Int        @id @default(autoincrement())
+  idea         Idea @relation(fields:[ideaId], references: [id])
+  ideaId       Int
+  user         User @relation(fields:[userId], references: [id])
+  userId       Int
+  createdAt    DateTime @default(now())
+  // Data
+  vote         Vote
+
+  @@unique([ideaId, userId])
 }

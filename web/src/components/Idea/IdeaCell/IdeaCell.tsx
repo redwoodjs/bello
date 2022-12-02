@@ -13,7 +13,21 @@ export const QUERY = gql`
         id
         firstname
         lastname
+        avatar
       }
+      champions {
+        id
+        firstname
+        lastname
+        avatar
+      }
+      count {
+        upvotes
+        downvotes
+        total
+      }
+      userVote
+      status
       title
       problem
       solution

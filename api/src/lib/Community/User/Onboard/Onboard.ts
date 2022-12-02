@@ -10,8 +10,8 @@ export default <MutationResolvers['onboardUser']>(
     return db.user.update({
       data: {
         ...input,
-        skillSets: { connect: input.skillSets.map((id) => ({ id })) },
-        topics: { connect: input.topics.map((id) => ({ id })) },
+        skillSets: { set: input.skillSets.map((id) => ({ id })) },
+        topics: { set: input.topics.map((id) => ({ id })) },
         hasOnboarded: true,
       },
       where: { id: context.currentUser.id },

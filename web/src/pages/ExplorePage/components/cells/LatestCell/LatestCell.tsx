@@ -1,10 +1,11 @@
-import { Badge, Spoiler } from '@mantine/core'
-import { Link, routes } from '@redwoodjs/router'
+import { Skeleton } from '@mantine/core'
+import IdeaCard, { Variant } from 'src/components/IdeaCard/IdeaCard'
 
 export const QUERY = gql`
   query LATEST_CELL {
     ideas: latest {
       id
+      createdAt
       title
       problem
       topics {
@@ -15,33 +16,28 @@ export const QUERY = gql`
   }
 `
 
+export const Loading = () => (
+  <>
+    {[...Array(6)].map((_x, k) => (
+      <React.Fragment key={`LatestCell - Loading - ${k}`}>
+        <Skeleton height={12} radius="xl" />
+        <Skeleton height={8} radius="xl" />
+        <Skeleton height={8} mt={6} radius="xl" />
+      </React.Fragment>
+    ))}
+  </>
+)
+
 export const Success = ({ ideas }) => (
   <>
-    {ideas?.length && (
-      <section className="w-full flex flex-col justify-center items-center mt-12">
-        <h1 className="text-4xl font-serif">Fresh from the top of our heads</h1>
-        <div className="grid lg:grid-cols-3 grid-cols-1 gap-4 mt-12">
-          {ideas?.map((idea) => (
-            <Link to={routes.idea({ id: idea.id })} className="">
-              <div
-                key={`Latest - ${idea.title}`}
-                className="border pb-10 relative rounded p-4 hover:shadow-lg h-full"
-              >
-                <p className="text-xl font-bold text-gray-700">{idea.title}</p>
-                <div className="mt-1">
-                  {idea.topics.map((topic) => (
-                    <Badge>{topic.label}</Badge>
-                  ))}
-                </div>
-                <p className="mt-4">{idea.problem.substr(0, 130)}</p>
-                <p className="text-right absolute bottom-0 right-0 p-4 font-bold text-red-700">
-                  New!
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-    )}
+    {ideas?.length &&
+      ideas?.map((idea) => (
+        <IdeaCard
+          key={`LatestCell - ${idea.title}`}
+          idea={idea}
+          variant={Variant.new}
+          noText
+        />
+      ))}
   </>
 )

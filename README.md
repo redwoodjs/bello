@@ -1,6 +1,21 @@
 # README
 
-Welcome to [RedwoodJS](https://redwoodjs.com)!
+Welcome to [Bello](https://github.com/redwoodjs/bello)!
+
+## Purpose
+
+Bello is a social network targeted at focusing the community's interest into RedwoodJS and turning it into merged PR.
+
+### **Idea User Flow and Lifecycle**
+
+1. Author creates an Idea (following ReadmeDD process)
+2. Author manages personal list of Ideas
+3. Author iterates on specific Idea(s)
+4. Author publishes a specific Idea to the community
+5. Author evangelizes a specific Idea
+6. Community members express _interest_ in an Idea
+7. Author evaluates interest in an Idea over time
+8. Author views the list of individuals who are interested in an Idea
 
 > **Prerequisites**
 >
@@ -27,23 +42,30 @@ Your browser should automatically open to http://localhost:8910 where you'll see
 > Congratulations on running your first Redwood CLI command!
 > From dev to deploy, the CLI is with you the whole way.
 > And there's quite a few commands at your disposal:
+>
 > ```
 > yarn redwood --help
 > ```
+>
 > For all the details, see the [CLI reference](https://redwoodjs.com/docs/cli-commands).
 
 ## Prisma and the database
 
 Consider using local databases:
+
 ```shell
 sudo -u postgres psql;
 # In your client:
 CREATE DATABASE bello;
 CREATE USER bello WITH ENCRYPTED PASSWORD 'bello' createdb;
 GRANT ALL PRIVILEGES ON DATABASE bello TO bello;
+
+# The appropriate cleanup
+# drop owned by bello; drop database bello; drop role bello;
 ```
 
 And now, a database dedicated to tests:
+
 ```shell
 CREATE DATABASE test_bello;
 CREATE USER test_bello WITH ENCRYPTED PASSWORD 'test_bello'  createdb;
@@ -75,7 +97,7 @@ Redwood fully integrates Jest with the front and the backends and makes it easy 
 yarn rw test
 ```
 
-To make the integration even more seamless, Redwood augments Jest with database [scenarios](https://redwoodjs.com/docs/testing.md#scenarios)  and [GraphQL mocking](https://redwoodjs.com/docs/testing.md#mocking-graphql-calls).
+To make the integration even more seamless, Redwood augments Jest with database [scenarios](https://redwoodjs.com/docs/testing.md#scenarios) and [GraphQL mocking](https://redwoodjs.com/docs/testing.md#mocking-graphql-calls).
 
 ## Ship it
 

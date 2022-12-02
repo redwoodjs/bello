@@ -1,5 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
-import Face from 'src/components/Face/Face'
+import Face, { Capacity, FaceProps } from 'src/components/Face/Face'
+import { User } from 'types/graphql'
 
 export enum Variant {
   portrait = 'portrait',
@@ -22,16 +23,22 @@ const style: Record<Variant, Classes> = {
   },
 }
 
-const Person = ({
+interface PersonProps extends Pick<FaceProps, 'capacity'>, User {
+  variant: Variant
+  className?: string
+}
+
+const Person: React.FC<PersonProps> = ({
   id,
   firstname,
   lastname,
   role,
   capacity,
   avatar,
+  className = '',
   variant = Variant.landscape,
 }) => (
-  <Link to={routes.user({ id })} className="h-fit">
+  <Link to={routes.user({ id })} className={`h-fit ${className}`}>
     <div className={style[variant].container}>
       <Face
         capacity={variant === Variant.landscape ? capacity : undefined}
@@ -42,7 +49,9 @@ const Person = ({
         <p className="font-bold text-sm">
           {firstname} {lastname}
         </p>
-        <p className="leading-3 text-xs text-gray-600">{'@capacity'}</p>
+        <p className="leading-3 text-xs text-gray-600">
+          {capacity && `@${capacity}`}
+        </p>
       </div>
     </div>
   </Link>

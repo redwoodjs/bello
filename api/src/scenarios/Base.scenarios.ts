@@ -35,6 +35,17 @@ export const standard = defineScenario({
       }
     },
   },
+  member: {
+    one(scenario) {
+      return {
+        data: {
+          title: 'Hey! Bob here.',
+          description: 'Nothing here',
+          user: { connect: { id: scenario.user.one.id } },
+        },
+      }
+    },
+  },
   idea: {
     one(scenario) {
       return {

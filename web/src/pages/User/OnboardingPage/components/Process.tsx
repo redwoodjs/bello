@@ -17,7 +17,6 @@ const steps: Record<Status, Step> = {
 
 const Process = () => {
   const { current, next, save, finish, data } = useProcess()
-  console.log(data)
 
   return (
     <section>

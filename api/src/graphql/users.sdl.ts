@@ -17,7 +17,11 @@ export const schema = gql`
     championFor: [Idea]!
     captainFor: [Idea]!
     follows: [Idea]!
-    member: [Member]!
+    member: Member
+    votes: [Vote]
+    adminOfBusinessEntity: BusinessEntity
+    memberOf: [BusinessEntity!]!
+    recommendations: [Recommendation!]!
   }
 
   enum Role {
