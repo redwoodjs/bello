@@ -1,6 +1,7 @@
 import { db } from '$api/src/lib/db'
 import { Vote, IdeaStatus } from '@prisma/client'
 import { ideas as IdeaSeeds } from 'api/src/seeds/ideas'
+import { roll } from 'api/src/utils'
 import dayjs from 'dayjs'
 import _ from 'lodash'
 
@@ -79,13 +80,23 @@ async function sortLatestOut() {
  * @param coreteam
  */
 async function assignChampions(idea, coreteam) {
+  const { author } = await db.idea.findUnique({
+    where: { id: idea.id },
+    select: { author: { select: { id: true } } },
+  })
+
+  const champions = _.uniqWith(
+    [...Array(3)].map((_i) => roll(coreteam, author)),
+    _.isEqual
+  )
+    .slice(0, _.random(0, 3, false))
+    .filter(Boolean)
+
   await db.idea.update({
     where: { id: idea.id },
     data: {
       champions: {
-        connect: _.sampleSize(coreteam, 3)
-          .slice(0, _.random(0, 3, false))
-          .map((ct) => ({ id: ct.id })),
+        connect: champions,
       },
     },
   })

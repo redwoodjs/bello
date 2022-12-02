@@ -3,14 +3,7 @@ import { db } from 'api/src/lib/db'
 import { faker } from '@faker-js/faker'
 import _ from 'lodash'
 
-const ROLES: Role[] = [
-  'admin',
-  'coreteam',
-  'partner',
-  'startup',
-  'contributor',
-  'default',
-]
+const ROLES: Role[] = ['admin', 'coreteam', 'contributor', 'default']
 
 const STRENGTHS = ['architect', 'fullstack', 'frontend', 'backend', 'mobile']
 

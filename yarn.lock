@@ -24988,6 +24988,7 @@ __metadata:
     autoprefixer: ^10.4.7
     classnames: ^2.3.1
     framer-motion: ^6
+    humanize-string: 2.1.0
     postcss: ^8.4.14
     postcss-loader: ^7.0.0
     prop-types: 15.8.1

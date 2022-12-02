@@ -8,11 +8,14 @@ generator client {
   binaryTargets   = ["native", "rhel-openssl-1.0.x"]
 }
 
+enum BusinessEntityType {
+  partner
+  startup
+}
+
 enum Role {
   admin
   coreteam
-  partner
-  startup
   contributor
   default
 }
@@ -54,34 +57,58 @@ model Topic {
   ideaId      Int?
 }
 
+model BusinessEntity {
+  id              Int    @id @default(autoincrement())
+  type            BusinessEntityType
+  label           String @unique
+  description     String @unique
+  url             String? @unique
+  admin           User @relation("BusinessEntityAdmin", fields:[adminId],references: [id])
+  adminId         Int @unique
+  team            User[] @relation("BusinessEntityTeam")
+  recommendations Recommendation[]
+}
+
+model Recommendation {
+  id                Int    @id @default(autoincrement())
+  businessEntity    BusinessEntity @relation(fields:[businessEntityId],references:[id])
+  businessEntityId  Int
+  user              User @relation(fields:[userId],references: [id])
+  userId            Int
+  text              String
+}
+
 model User {
   // Meta.
-  id                  Int        @id @default(autoincrement())
-  role                Role       @default(default)
+  id                    Int        @id @default(autoincrement())
+  role                  Role       @default(default)
   // Data.
-  hasOnboarded        Boolean    @default(false)
-  email               String     @unique
-  username            String?    @unique
-  firstname           String?
-  lastname            String?
-  avatar              String?
+  hasOnboarded          Boolean    @default(false)
+  email                 String     @unique
+  username              String?    @unique
+  firstname             String?
+  lastname              String?
+  avatar                String?
   // Auth
-  hashedPassword      String
-  salt                String
-  resetToken          String?
-  resetTokenExpiresAt DateTime?
+  hashedPassword        String
+  salt                  String
+  resetToken            String?
+  resetTokenExpiresAt   DateTime?
   // Relationships.
-  strength            SkillSet?   @relation("SkillsetStrength", fields: [strengthId], references: [id])
-  strengthId          Int?
-  skills              Skill[]
-  skillSets           SkillSet[] @relation("UserSkillsets")
-  topics              Topic[]
-  authorOf            Idea[]     @relation("UserAuthorOfIdea")
-  championFor         Idea[]     @relation("UserChampionOfIdea")
-  captainFor          Idea[]     @relation("UserCaptainOfIdea")
-  follows             Idea[]     @relation("UserInterestedInIdea")
-  votes               IdeaVote[]
-  member              Member?
+  strength              SkillSet?   @relation("SkillsetStrength", fields: [strengthId], references: [id])
+  strengthId            Int?
+  skills                Skill[]
+  skillSets             SkillSet[] @relation("UserSkillsets")
+  topics                Topic[]
+  adminOfBusinessEntity BusinessEntity? @relation("BusinessEntityAdmin")
+  memberOf              BusinessEntity[] @relation("BusinessEntityTeam")
+  authorOf              Idea[]     @relation("UserAuthorOfIdea")
+  championFor           Idea[]     @relation("UserChampionOfIdea")
+  captainFor            Idea[]     @relation("UserCaptainOfIdea")
+  follows               Idea[]     @relation("UserInterestedInIdea")
+  votes                 IdeaVote[]
+  recommendations       Recommendation[]
+  member                Member?
 }
 
 model Member {

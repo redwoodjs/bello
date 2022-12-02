@@ -25,6 +25,7 @@
     "@tabler/icons": "^1.78.1",
     "classnames": "^2.3.1",
     "framer-motion": "^6",
+    "humanize-string": "2.1.0",
     "prop-types": "15.8.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",

@@ -9,12 +9,26 @@
 
 import { Set, Router, Route } from '@redwoodjs/router'
 
+import ScaffoldLayout from 'src/layouts/ScaffoldLayout'
+
 import MainLayout from 'src/layouts/MainLayout'
 import EmptyLayout from 'src/layouts/EmptyLayout/EmptyLayout'
 
 const Routes = () => {
   return (
     <Router>
+      <Set wrap={ScaffoldLayout} title="Recommendations" titleTo="recommendations" buttonLabel="New Recommendation" buttonTo="newRecommendation">
+        <Route path="/recommendations/new" page={RecommendationNewRecommendationPage} name="newRecommendation" />
+        <Route path="/recommendations/{id:Int}/edit" page={RecommendationEditRecommendationPage} name="editRecommendation" />
+        <Route path="/recommendations/{id:Int}" page={RecommendationRecommendationPage} name="recommendation" />
+        <Route path="/recommendations" page={RecommendationRecommendationsPage} name="recommendations" />
+      </Set>
+      <Set wrap={ScaffoldLayout} title="BusinessEntities" titleTo="businessEntities" buttonLabel="New BusinessEntity" buttonTo="newBusinessEntity">
+        <Route path="/business-entities/new" page={BusinessEntityNewBusinessEntityPage} name="newBusinessEntity" />
+        <Route path="/business-entities/{id:Int}/edit" page={BusinessEntityEditBusinessEntityPage} name="editBusinessEntity" />
+        <Route path="/business-entities/{id:Int}" page={BusinessEntityBusinessEntityPage} name="businessEntity" />
+        <Route path="/business-entities" page={BusinessEntityBusinessEntitiesPage} name="businessEntities" />
+      </Set>
       <Route path="/" page={HomepagePage} name="homepage" />
       <Route path="/login" page={LoginPage} name="login" />
       <Route path="/signup" page={SignupPage} name="signup" />

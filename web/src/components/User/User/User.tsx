@@ -4,6 +4,7 @@ import { IconBroadcast } from '@tabler/icons'
 import { useAuth } from '@redwoodjs/auth'
 import { Badge } from '@mantine/core'
 import Divider from 'src/components/Divider/Divider'
+import { Box, Grid, GridItem, HStack, Text, VStack } from '@chakra-ui/react'
 
 const User = ({ user }) => {
   const { currentUser } = useAuth()
@@ -46,6 +47,29 @@ const User = ({ user }) => {
         <p>{user.member.description}</p>
       </article>
       <Divider />
+      <Grid templateColumns={'repeat(2,1fr)'} gap={4}>
+        {user?.recommendations?.map(({ text, businessEntity: { label } }) => (
+          <GridItem
+            border="1px solid"
+            borderColor="vapor"
+            borderRadius={8}
+            p={4}
+          >
+            <Text fontSize={12}>{text}</Text>
+            <HStack justifyContent="flex-end" mt={4}>
+              <Text
+                bgColor="vapor"
+                p={2}
+                color="white"
+                fontWeight={800}
+                fontSize={14}
+              >
+                {label}
+              </Text>
+            </HStack>
+          </GridItem>
+        ))}
+      </Grid>
     </>
   )
 }

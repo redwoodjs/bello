@@ -3,6 +3,7 @@ import skills from './seed/skills'
 import skillsets from './seed/skillsets'
 import topics from './seed/topics'
 import ideas from './seed/ideas'
+import businessEntities from './seed/businessEntities'
 import { db } from '$api/src/lib/db'
 
 export default async () => {
@@ -30,6 +31,10 @@ Sorry about that - it's necessary to clean up online environment. We'll sort it 
 
     await db.user.deleteMany()
 
+    await db.businessEntity.deleteMany()
+
+    await db.recommendation.deleteMany()
+
     await topics()
 
     await skillsets()
@@ -39,6 +44,8 @@ Sorry about that - it's necessary to clean up online environment. We'll sort it 
     await users()
 
     await ideas()
+
+    await businessEntities()
   } catch (error) {
     console.error(error)
   }
